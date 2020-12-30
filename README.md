@@ -1,2 +1,2 @@
 # football-charts
-football charts created by R
+football charts created with R
