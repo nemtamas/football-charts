@@ -1,6 +1,5 @@
 ---
-title: "Untitled"
-author: "Én"
+title: "Best creators in Europe's top 5 leagues"
 date: '2020 11 14 '
 output: html_document
 ---
@@ -68,18 +67,17 @@ def <- read_html("https://fbref.com/en/comps/Big5/gca/players/Big-5-European-Lea
 best_creators <- data.frame(player_names, xa, pass_live, ninetees, league, drib, sh, fld, def)
 
 clean_best_creators <- best_creators %>% 
-  mutate(league = str_remove_all(league, "eng")) %>%
-  mutate(league = str_remove_all(league, "de")) %>% 
-  mutate(league = str_remove_all(league, "es")) %>% 
-  mutate(league = str_remove_all(league, "it")) %>% 
-  mutate(league = str_remove_all(league, "fr")) %>% 
-  mutate(league = str_replace_all(league, "Bunsliga", "Bundesliga"))
+  mutate(league = str_remove_all(league, "eng"),
+         league = str_remove_all(league, "de"),
+         league = str_remove_all(league, "es"),
+         league = str_remove_all(league, "it"),
+         league = str_remove_all(league, "fr"),
+         league = str_replace_all(league, "Bunsliga", "Bundesliga"))
    
 
 clean_best_creators2 <- clean_best_creators %>% 
   mutate(open_play_actions = (pass_live + drib + sh + fld + def) / ninetees) %>% 
   mutate(xa90 = xa / ninetees) 
-
 
 
 clean_best_creators2 %>%
@@ -89,7 +87,7 @@ clean_best_creators2 %>%
   geom_point(aes(color = league, size = 0)) +
   guides(colour = guide_legend(override.aes = list(size=5))) +
   guides(size = FALSE) +
-  geom_text_repel(aes(label=ifelse((xa90 > 0.4)|(open_play_actions > 5), player_names,''))) +
+  geom_text_repel(aes(label=ifelse((xa90 > 0.4)|(open_play_actions > 4), player_names,''))) +
    labs(x = "Open play SCA per 90",
        y = "xA per 90",
        title = "Best creators in Europe's top 5 leagues in 2020-2021",
