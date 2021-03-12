@@ -1,6 +1,5 @@
 ---
-title: "Best creators in Europe's top 5 leagues in 2020-2021"
-date: '2020 11 14 '
+title: "Best Creators in Europe's top 5 Leagues in 2020-2021"
 output: html_document
 ---
 
@@ -76,32 +75,31 @@ clean_best_creators <- best_creators %>%
   
   
 
-clean_best_creators2 <- clean_best_creators %>% 
+clean_best_creators <- clean_best_creators %>% 
   mutate(open_play_actions = (pass_live + drib + sh + fld + def) / ninetees) %>% 
   mutate(xa90 = xa / ninetees) 
 
 
 
-clean_best_creators2 %>%
-  top_n(100) %>% 
-  filter(ninetees >= 8) %>% 
+clean_best_creators %>%
+  top_n(150) %>% 
+  filter(ninetees >= 12) %>% 
   ggplot(aes(open_play_actions, xa90, label = player_names)) +
-  geom_point(aes(color = league, size = 0)) +
+  geom_point(aes(color = league, size = 5)) +
   guides(colour = guide_legend(override.aes = list(size=5))) +
   guides(size = FALSE) +
-  geom_text_repel(aes(label=ifelse((xa90 > 0.3)|(open_play_actions > 3), player_names,''))) +
-   labs(x = "Open play SCA per 90",
+  geom_text_repel(aes(label=ifelse((xa90 > 0.3)|(open_play_actions > 5), player_names,''))) +
+  theme(panel.background = element_rect(fill = "#F8F9F9"),
+        panel.border = element_blank(),
+        panel.grid.major = element_line(color = "#ABB2B9"),
+        panel.grid.minor = element_line(color = "#ABB2B9"),
+        plot.background = element_rect(fill = "#F8F9F9"),
+        legend.background = element_rect(fill="#F8F9F9"),
+        legend.title=element_blank(),
+        legend.key = element_rect(fill = "#F8F9F9")) +
+  labs(x = "Open play SCA per 90",
        y = "xA per 90",
        title = "Best creators in Europe's top 5 leagues in 2020-2021",
-       subtitle = "Minimum 8 90s played", 
-       caption = "data: fbref.com") +
- theme(panel.background = element_rect(fill = "#F8F9F9"),
-          panel.border = element_blank(),
-          panel.grid.major = element_line(color = "#ABB2B9"),
-          panel.grid.minor = element_line(color = "#ABB2B9"),
-          plot.background = element_rect(fill = "#F8F9F9"),
-          legend.background = element_rect(fill="#F8F9F9"),
-          legend.title=element_blank(),
-          legend.key = element_rect(fill = "#F8F9F9"))
-
+       subtitle = "Minimum 12 90s played", 
+       caption = "data: fbref.com") 
 ```
