@@ -1,2 +1,2 @@
 # football-charts
-football charts created with R
+Football data visualizations created with R
