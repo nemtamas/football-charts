@@ -1,2 +1,2 @@
 # football-charts
-Football data visualizations created with R
+Repository containing football data visualizations created by me for, self learning, and hobby purposes in R.
