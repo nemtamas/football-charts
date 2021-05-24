@@ -12,7 +12,6 @@ library(tidyverse)
 library(rvest)
 library(scales)
 library(ggrepel) 
-library(magick)
 ```
 
 ```{r}
