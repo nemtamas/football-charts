@@ -65,7 +65,7 @@ def <- read_html("https://fbref.com/en/comps/Big5/gca/players/Big-5-European-Lea
 ```{r}
 best_creators <- data.frame(player_names, xa, pass_live, ninetees, league, drib, sh, fld, def)
 
-clean_best_creators <- best_creators %>% 
+best_creators <- best_creators %>% 
   mutate(league = str_remove_all(league, "eng"),
          league = str_remove_all(league, "de"),
          league = str_remove_all(league, "es"),
@@ -75,7 +75,7 @@ clean_best_creators <- best_creators %>%
   
   
 
-clean_best_creators <- clean_best_creators %>% 
+best_creators <- best_creators %>% 
   mutate(open_play_actions = (pass_live + drib + sh + fld + def) / ninetees) %>% 
   mutate(xa90 = xa / ninetees) 
 
@@ -84,7 +84,7 @@ clean_best_creators <- clean_best_creators %>%
 ```{r}
 clean_best_creators %>%
   top_n(200) %>% 
-  filter(ninetees >= 12) %>% 
+  filter(ninetees >= 18) %>% 
   ggplot(aes(open_play_actions, xa90, label = player_names)) +
   geom_point(size = 3, color = "blue") +
   geom_text_repel(aes(label=ifelse((xa90 > 0.3)|(open_play_actions > 5), player_names,''))) +
@@ -96,7 +96,7 @@ clean_best_creators %>%
        labs(x = "Open play SCA per 90",
        y = "xA per 90",
        title = "Best Creators in Europe's Top 5 Leagues in 2020-2021",
-       subtitle = "Minimum 12 90s played", 
+       subtitle = "Minimum 18 90s played", 
        caption = "data: fbref.com") 
 ```
 

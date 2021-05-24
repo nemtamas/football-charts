@@ -1,5 +1,5 @@
 ---
-title: "Top Five League Expected Goal Contributions"
+title: "Top Five League Expected Goal Contributions 2020-2021"
 output: html_document
 ---
 
@@ -12,6 +12,7 @@ library(tidyverse)
 library(rvest)
 library(scales)
 library(ggrepel) 
+library(magick)
 ```
 
 ```{r}
@@ -40,23 +41,36 @@ ninetees <- read_html("https://fbref.com/en/comps/Big5/shooting/players/Big-5-Eu
   as.numeric()
 ```
 
-```{r}
-fbref <- data.frame(player_names, npxg, xa, ninetees, league) %>% 
-  mutate(npxg90 = npxg / ninetees) %>% 
-  mutate(xa90 = xa / ninetees) %>%
-  mutate(league = str_remove_all(league, "eng"),
-         league = str_remove_all(league, "de"),
-         league = str_remove_all(league, "es"),
-         league = str_remove_all(league, "it"),
-         league = str_remove_all(league, "fr"),
-         league = str_replace_all(league, "Bunsliga", "Bundesliga")) %>% 
-  select(player_names, ninetees, league, npxg90, xa90)
-  
-```
+#Top 5 League
 
 ```{r}
 fbref %>% 
-  filter(ninetees >= min(12),
+  filter(ninetees >= 18) %>% 
+  top_n(n = 15, w = npxg90) %>% 
+  mutate(player_names = fct_reorder(player_names, npxg90)) %>%
+  ggplot(aes(x = npxg90, y = player_names, fill = xa90)) +
+  geom_col() +
+  geom_text(aes(label = round(npxg90, 2)), nudge_x = -.020, color="white", hjust = 1) +
+  scale_x_continuous(expand = expansion(mult = c(0, .1))) +
+  scale_fill_gradient(low = 'gray60', high = 'gray8') +
+  theme_light() +
+  theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_blank()) +
+   labs(x = " ",
+       y = " ",
+       title = "Expected Goal Contributions In Top 5 League",
+       subtitle = "minimum 18 90s played",
+       caption = "data: fbref.com",
+       fill = "xA/90")
+```
+
+#Bundesliga
+
+```{r}
+fbref %>% 
+  filter(ninetees >= 18,
          str_detect(league, "Bundesliga")) %>%
   top_n(n = 15, w = npxg90) %>% 
   mutate(player_names = fct_reorder(player_names, npxg90)) %>%
@@ -73,14 +87,16 @@ fbref %>%
    labs(x = " ",
        y = " ",
        title = "Bundesliga Expected Goal Contributions",
-       subtitle = "minimum 12 90s played",
+       subtitle = "minimum 18 90s played",
        caption = "data: fbref.com",
        fill = "xA/90")
 ```
 
+#Premier League
+
 ```{r}
 fbref %>% 
-  filter(ninetees >= min(12),
+  filter(ninetees >= 18,
          str_detect(league, "Premier League")) %>%
   top_n(n = 15, w = npxg90) %>% 
   mutate(player_names = fct_reorder(player_names, npxg90)) %>%
@@ -97,14 +113,16 @@ fbref %>%
    labs(x = " ",
        y = " ",
        title = "Premier League Expected Contributions",
-       subtitle = "minimum 12 90s played",
+       subtitle = "minimum 18 90s played",
        caption = "data: fbref.com",
        fill = "xA/90")
 ```
 
+#LaLiga
+
 ```{r}
 fbref %>% 
-  filter(ninetees >= min(12),
+  filter(ninetees >= 18,
          str_detect(league, "La Liga")) %>%
   top_n(n = 15, w = npxg90) %>% 
   mutate(player_names = fct_reorder(player_names, npxg90)) %>%
@@ -121,14 +139,16 @@ fbref %>%
    labs(x = " ",
        y = " ",
        title = "La Liga Leaders Expected Goal Contributions",
-       subtitle = "minimum 12 90s played",
+       subtitle = "minimum 18 90s played",
        caption = "data: fbref.com",
        fill = "xA/90")
 ```
 
+#Seria A
+
 ```{r}
 fbref %>% 
-  filter(ninetees >= min(12),
+  filter(ninetees >= 18,
          str_detect(league, "Serie A")) %>%
   top_n(n = 15, w = npxg90) %>% 
   mutate(player_names = fct_reorder(player_names, npxg90)) %>%
@@ -145,14 +165,16 @@ fbref %>%
    labs(x = " ",
        y = " ",
        title = "Serie A Leaders Expected Goal Contributions",
-       subtitle = "minimum 12 90s played",
+       subtitle = "minimum 18 90s played",
        caption = "data: fbref.com",
        fill = "xA/90")
 ```
 
+#League 1
+
 ```{r}
 fbref %>% 
-  filter(ninetees >= min(12),
+  filter(ninetees >= 18,
          str_detect(league, "Ligue 1")) %>%
   top_n(n = 15, w = npxg90) %>% 
   mutate(player_names = fct_reorder(player_names, npxg90)) %>%
@@ -169,7 +191,7 @@ fbref %>%
    labs(x = " ",
        y = " ",
        title = "Ligue 1 Leaders Expected Goal Contributions",
-       subtitle = "minimum 12 90s played",
+       subtitle = "minimum 18 90s played",
        fill = "xA/90")
 ```
 
